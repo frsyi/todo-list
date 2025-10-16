@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 module.exports = {
@@ -55,7 +56,22 @@ module.exports = {
         return res.status(400).json({ message: "Invalid password" });
       }
 
-      res.status(200).json({ message: "User logged in successfully" });
+      const token = jwt.sign(
+        {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      res.status(200).json({
+        message: "User logged in successfully",
+        token,
+      });
     } catch (error) {
       res
         .status(500)
