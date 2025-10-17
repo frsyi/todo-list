@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const { verifyToken } = require("../middleware/auth");
 
 const authRouter = require("./auth");
 const todoRouter = require("./todo");
 
 router.use("/api/auth", authRouter);
-router.use("/api/todos", todoRouter);
+router.use("/api/todos", verifyToken, todoRouter);
 
 module.exports = router;
