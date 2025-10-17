@@ -13,7 +13,7 @@ module.exports = {
       const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = decoded;
+      req.user = { _id: decoded.id, name: decoded.name, email: decoded.email };
       next();
     } catch (error) {
       if (error.name === "TokenExpiredError") {
